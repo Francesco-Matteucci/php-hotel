@@ -66,6 +66,8 @@ if (isset($_GET['vote'])) {
     <!-- Bootstrap style -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- AOS style -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 
 <body>
@@ -101,7 +103,7 @@ if (isset($_GET['vote'])) {
             </thead>
             <tbody>
                 <?php foreach ($hotels as $hotel) { if ((!$isParking || $hotel['parking']) && $hotel['vote'] >= $hotelRating) { ?>
-                <tr>
+                <tr data-aos="fade-right" data-aos-duration="1000">
                     <td class="fw-bold"><?= $hotel['name'] ?></td>
                     <td><?= $hotel['description'] ?></td>
                     <td><?= $hotel['parking'] ? 'Si' : 'No' ?></td>
@@ -113,6 +115,10 @@ if (isset($_GET['vote'])) {
         </table>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+    AOS.init();
+    </script>
 </body>
 
 </html>
