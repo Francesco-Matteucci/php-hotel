@@ -38,6 +38,9 @@ $hotels = [
     ],
 ];
 
+// Eseguo un controllo per vedere se è stata fatta o meno una richiesta GET per il parcheggio
+$isParking = isset($_GET['parking']);
+
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +58,18 @@ $hotels = [
 <body>
 
     <div class="container">
-        <h1 class="my-4 text-center">Lista Hotels</h1>
+        <h1 class="my-4 text-center">Lista Hotel</h1>
+
+        <form method="GET" class="mb-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="parking" name="parking" value="1"
+                    <?php if ($isParking) echo 'checked'; ?>>
+                <label class="form-check-label" for="parking">
+                    Mostra solo gli hotel con il parcheggio
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Filtra gli Hotels</button>
+        </form>
 
         <table class="table table-striped">
             <thead>
@@ -68,15 +82,18 @@ $hotels = [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($hotels as $hotel) { ?>
+                <?php foreach ($hotels as $hotel) { 
+                 
+                    if (!$isParking || $hotel['parking']) { ?>
                 <tr>
                     <td class="fw-bold"><?= $hotel['name'] ?></td>
                     <td><?= $hotel['description'] ?></td>
-                    <td><?= $hotel['parking'] ? 'Si' : 'No' ?></td>
+                    <td><?= $hotel['parking'] ? 'Sì' : 'No' ?></td>
                     <td><?= $hotel['vote'] ?> stelle</td>
                     <td><?= $hotel['distance_to_center'] ?> km</td>
                 </tr>
-                <?php } ?>
+                <?php }
+                } ?>
             </tbody>
         </table>
     </div>
