@@ -41,6 +41,19 @@ $hotels = [
 // Eseguo un controllo per vedere se è stata fatta o meno una richiesta GET per il parcheggio
 $isParking = isset($_GET['parking']);
 
+// Verifico se è stato inserito un voto
+if (isset($_GET['vote'])) {
+    $hotelRating = (int)$_GET['vote'];
+
+    // Imposto il voto minimo ad 1, nel caso l'utente inserisca 0 o un numero negativo
+    if ($hotelRating < 1) {
+        $hotelRating = 1;
+    }
+} else {
+    // Se l'utente non inserisce voti, imposto il minimo ad 1
+    $hotelRating = 1;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +74,19 @@ $isParking = isset($_GET['parking']);
         <h1 class="my-4 text-center">Lista Hotel</h1>
 
         <form method="GET" class="mb-4">
-            <div class="form-check">
+            <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="parking" name="parking" value="1"
                     <?php if ($isParking) echo 'checked'; ?>>
                 <label class="form-check-label" for="parking">
                     Mostra solo gli hotel con il parcheggio
                 </label>
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Filtra gli Hotels</button>
+            <div class="mb-3">
+                <label for="vote" class="form-label">Stelle minime:</label>
+                <input type="number" class="form-control" id="vote" name="vote" min="0" max="5"
+                    value="<?= $hotelRating ?>">
+            </div>
+            <button type="submit" class="btn btn-primary">Filtra secondi i criteri di ricerca</button>
         </form>
 
         <table class="table table-striped">
@@ -82,18 +100,15 @@ $isParking = isset($_GET['parking']);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($hotels as $hotel) { 
-                 
-                    if (!$isParking || $hotel['parking']) { ?>
+                <?php foreach ($hotels as $hotel) { if ((!$isParking || $hotel['parking']) && $hotel['vote'] >= $hotelRating) { ?>
                 <tr>
                     <td class="fw-bold"><?= $hotel['name'] ?></td>
                     <td><?= $hotel['description'] ?></td>
-                    <td><?= $hotel['parking'] ? 'Sì' : 'No' ?></td>
+                    <td><?= $hotel['parking'] ? 'Si' : 'No' ?></td>
                     <td><?= $hotel['vote'] ?> stelle</td>
                     <td><?= $hotel['distance_to_center'] ?> km</td>
                 </tr>
-                <?php }
-                } ?>
+                <?php }} ?>
             </tbody>
         </table>
     </div>
